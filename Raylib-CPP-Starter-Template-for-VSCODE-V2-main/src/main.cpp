@@ -20,30 +20,73 @@ int main(){
 
         ClearBackground(green);
 
-        if (IsKeyDown('W')){
-            playerOneY -= 3;   
-        }
-        else if (IsKeyDown('S')){
-            playerOneY += 3;
-        }
-        else if (IsKeyDown(KEY_UP)){
-            playerTwoY -= 3;
-        }
-        else if (IsKeyDown(KEY_DOWN)){
-            playerTwoY += 3;
-        }
+        // if (IsKeyDown('W')){
+        //     playerOneY -= 5;   
+        // }
+        // else if (IsKeyDown('S')){
+        //     playerOneY += 5;
+        // }
+        // else if (IsKeyDown(KEY_UP)){
+        //     playerTwoY -= 5;
+        // }
+        // else if (IsKeyDown(KEY_DOWN)){
+        //     playerTwoY += 5;
+        // }
         
         DrawRectangle(playerOneX, playerOneY, 25, 75, WHITE);
         DrawRectangle(playerTwoX, playerTwoY, 25, 75, WHITE);
 
         DrawCircle(ballX, ballY, 20, WHITE);
-        ballX += 5;
-        ballY -= 5;
-            // TOP RIGHT
-            if (ballX >= playerTwoX){
-                
-            }
+
+        if (IsKeyDown('W')){
+            ballY -= 5;   
+        }
+        else if (IsKeyDown('S')){
+            ballY += 5;
+        }
+        else if (IsKeyDown('A')){
+            ballX -= 5;
+        }
+        else if (IsKeyDown('D')){
+            ballX += 5;
+        }
+        
+        if (ballX >= 775 && ballY >= 0){
+            ballX = 400;
+            ballY = 400;
             
+        }
+        else if (ballX <= 0 && ballY <= 0)
+        {
+            ballX = 400;
+            ballY = 400;
+        }
+        else if (ballX <= 25 && ballY <= 775)
+        {
+            ballX = 400;
+            ballY = 400;
+
+
+        }
+        else if (ballX >= 775 && ballY <= 775)
+        {
+            ballX = 400;
+            ballY = 400;
+        }
+        else if (ballY <= 25)
+        {
+            ballX = 400;
+            ballY = 400;
+        }
+        else if (ballY >= 775){
+            ballX = 400;
+            ballY = 400;
+        }
+        
+        
+        
+        
+        
         
         EndDrawing();
     }
