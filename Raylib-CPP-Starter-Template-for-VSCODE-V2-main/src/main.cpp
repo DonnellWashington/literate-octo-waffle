@@ -19,12 +19,18 @@ typedef struct {
 // Initialzation of the ball
 ball_t InitBall(){
     ball_t b;
-    b.pos.x = 400;
-    b.pos.y = 400;
-    b.speed.x = 4;
-    b.speed.y = -4;
+    
+    b.pos.x = GetScreenWidth() / 2;
+    b.pos.y = GetScreenHeight() / 2;
+
     b.radius = 10;
     b.color = RED;
+
+    int xDir = GetRandomValue(0,1) == 0 ? -1 : 1;
+    int yDir = GetRandomValue(0,1) == 0 ? -1 : 1;
+
+    b.speed.x = 5.0f * xDir;
+    b.speed.y = 5.0f * yDir;
 
     return b;
 }
@@ -40,6 +46,28 @@ void checkCollide(ball_t *ball, player_t *player){
 
 void drawPlayer(player_t *player){
     DrawRectangleRec(player->rect, player->color);
+}
+
+void checkWin(int &p1Score, int &p2Score){
+
+    int goal = 5;
+
+    if (p1Score == goal){
+        DrawText("Player1 Wins!", 200, 200, 100, RED);
+        p1Score = 0;
+        p2Score = 0;
+        WaitTime(3);
+    }
+
+    else if (p2Score == goal) {
+        DrawText("Player2 Wins!", 200, 200, 100, RED);
+        p1Score = 0;
+        p2Score = 0;
+        WaitTime(5);
+    }
+
+    
+
 }
 
 player_t InitPlayer(float x, float y, Color color){
@@ -58,6 +86,11 @@ player_t InitPlayer(float x, float y, Color color){
 
 int main(){
 
+    InitWindow(800, 800, "Poing!");
+    SetTargetFPS(60);
+
+    Color green = {20, 160, 133, 255};
+
     player_t player1 = InitPlayer(50, 250, WHITE);
     player_t player2 = InitPlayer(750, 250, WHITE);
 
@@ -66,17 +99,32 @@ int main(){
     int p1Score = 0;
     int p2Score = 0;
 
-    InitWindow(800, 800, "Poing!");
-    SetTargetFPS(60);
-
     while (WindowShouldClose() == false){
-        BeginDrawing();
+        
+        ball.pos.x += ball.speed.x;
+        ball.pos.y += ball.speed.y;
 
-        ClearBackground(GREEN);
+        if (ball.pos.x - ball.radius <= 0 || ball.pos.x + ball.radius >= GetScreenHeight()){
+            ball.speed.y *= -1;
+        }
 
-        drawBall(&ball);
-        drawPlayer(&player1);
-        drawPlayer(&player2);
+        if (ball.pos.y - ball.radius <= 0 || ball.pos.y + ball.radius >= GetScreenHeight())
+        {
+            ball.speed.y *= -1;
+        }
+        
+
+        if (ball.pos.x - ball.radius <= 0){
+            p2Score++;
+            ball = InitBall();
+        }
+        if (ball.pos.x + ball.radius >= GetScreenWidth()){
+            p1Score++;
+            ball = InitBall();
+        }
+
+        checkCollide(&ball, &player1);
+        checkCollide(&ball, &player2);
 
         // Player movement
         if(IsKeyDown('W')) player1.rect.y -= 5;
@@ -86,20 +134,23 @@ int main(){
         if (IsKeyDown(KEY_DOWN)) player2.rect.y += 5;
 
         if (IsKeyDown(KEY_UP)) player2.rect.y -= 5;
-    
-        // Borders and stuff
 
+        // Player borders y cosas otras
         if (player1.rect.y <= 0) player1.rect.y = 0;
         if (player1.rect.y + player1.rect.height > GetScreenHeight()) player1.rect.y = GetScreenHeight() - player1.rect.height;
 
         if (player2.rect.y <= 0) player2.rect.y = 0;
         if (player2.rect.y + player2.rect.height > GetScreenHeight()) player2.rect.y = GetScreenHeight() - player2.rect.height;
 
+        BeginDrawing();
+        ClearBackground(green);
+        drawBall(&ball);
+        drawPlayer(&player1);
+        drawPlayer(&player2);
         DrawText(TextFormat("%i | %i", p1Score, p2Score), 300, 15, 100, RED);
-
+        checkWin(p1Score, p2Score);
         EndDrawing();
     }
-    
 
     return 0;
 }
