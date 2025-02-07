@@ -58,16 +58,10 @@ player_t InitPlayer(float x, float y, Color color){
 
 int main(){
 
-    Color green = {20, 160, 133, 255};
+    player_t player1 = InitPlayer(50, 250, WHITE);
+    player_t player2 = InitPlayer(750, 250, WHITE);
 
-    int playerOneX = 15;
-    int playerOneY = 400;
-
-    int playerTwoX = 750;
-    int playerTwoY = 400;
-
-    int ballX = 400;
-    int ballY = 400;
+    ball_t ball = InitBall();
 
     int p1Score = 0;
     int p2Score = 0;
@@ -78,58 +72,30 @@ int main(){
     while (WindowShouldClose() == false){
         BeginDrawing();
 
-        ClearBackground(green);
+        ClearBackground(GREEN);
 
-        DrawRectangle(playerOneX, playerOneY, 25, 75, WHITE);
-        DrawRectangle(playerTwoX, playerTwoY, 25, 75, WHITE);
+        drawBall(&ball);
+        drawPlayer(&player1);
+        drawPlayer(&player2);
 
         // Player movement
-        if (IsKeyDown('W')){
-            playerOneY -= 5;   
-        }
-        else if (IsKeyDown('S')){
-            playerOneY += 5;
-        }
-        else if (IsKeyDown(KEY_UP)){
-            playerTwoY -= 5;
-        }
-        else if (IsKeyDown(KEY_DOWN)){
-            playerTwoY += 5;
-        }
+        if(IsKeyDown('W')) player1.rect.y -= 5;
+        
+        if(IsKeyDown('S')) player1.rect.y += 5;
+
+        if (IsKeyDown(KEY_DOWN)) player2.rect.y += 5;
+
+        if (IsKeyDown(KEY_UP)) player2.rect.y -= 5;
     
         // Borders and stuff
-        if (ballX >= 775 && ballY >= 0){
-            ballX = 400;
-            ballY = 400;
-            p1Score++;
-        }
-        else if (ballX <= 0 && ballY <= 0){
-            ballX = 400;
-            ballY = 400;
-            p2Score++;
-        }
-        else if (ballX <= 25 && ballY <= 775){
-            ballX = 400;
-            ballY = 400;
-            p2Score++;
-        }
-        else if (ballX >= 775 && ballY <= 775){
-            ballX = 400;
-            ballY = 400;
-            p1Score++;
-        }
-        else if (ballY <= 25){
-            ballX = 400;
-            ballY = 400;
-        }
-        else if (ballY >= 775){
-            ballX = 400;
-            ballY = 400;
-        }
-        
-        DrawText(TextFormat("%i | %i", p1Score, p2Score), 300, 15, 100, RED);
-        
 
+        if (player1.rect.y <= 0) player1.rect.y = 0;
+        if (player1.rect.y + player1.rect.height > GetScreenHeight()) player1.rect.y = GetScreenHeight() - player1.rect.height;
+
+        if (player2.rect.y <= 0) player2.rect.y = 0;
+        if (player2.rect.y + player2.rect.height > GetScreenHeight()) player2.rect.y = GetScreenHeight() - player2.rect.height;
+
+        DrawText(TextFormat("%i | %i", p1Score, p2Score), 300, 15, 100, RED);
 
         EndDrawing();
     }
