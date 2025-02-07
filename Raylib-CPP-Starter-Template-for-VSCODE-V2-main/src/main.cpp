@@ -1,30 +1,62 @@
 #include<raylib.h>
 
-typedef struct Player{
-
-    float x;
-    float y;
-
-    int width;
-    int height;
-
-    float speed;
-
-    Rectangle rec;
-
+// Basic player properties
+typedef struct {
+    Rectangle rect;
+    Color color;
+    Vector2 speed;
 } player_t;
 
-typedef struct Ball{
+// Basic ball properties
+typedef struct {
+    Vector2 pos;
+    Vector2 speed;
 
-    int radius;
+    float radius;
+    Color color;
+}ball_t;
+
+// Initialzation of the ball
+ball_t InitBall(){
+    ball_t b;
+    b.pos.x = 400;
+    b.pos.y = 400;
+    b.speed.x = 4;
+    b.speed.y = -4;
+    b.radius = 10;
+    b.color = RED;
+
+    return b;
+}
 
 
-} ball_t;
+//Draw the ball to the screen using the vector version of ball draw
+void drawBall(ball_t *ball){ DrawCircleV(ball->pos, ball->radius, ball->color);}
 
+// Check collisions between the ball and the players and reflect in other direction
+void checkCollide(ball_t *ball, player_t *player){
+    if (CheckCollisionCircleRec(ball->pos, ball->radius, player->rect)) ball->speed.x *= -1;
+}
+
+void drawPlayer(player_t *player){
+    DrawRectangleRec(player->rect, player->color);
+}
+
+player_t InitPlayer(float x, float y, Color color){
+    player_t p;
+    p.rect.x = x;
+    p.rect.y = y;
+    p.rect.width = 10;
+    p.rect.height = 100;
+    p.color = color;
+
+    p.speed.x = 0;
+    p.speed.y = 5;
+
+    return p;
+}
 
 int main(){
-
-    Vector2 center = {20.00, 10.0};
 
     Color green = {20, 160, 133, 255};
 
@@ -50,9 +82,6 @@ int main(){
 
         DrawRectangle(playerOneX, playerOneY, 25, 75, WHITE);
         DrawRectangle(playerTwoX, playerTwoY, 25, 75, WHITE);
-
-        DrawCircle(ballX, ballY, 20, WHITE);
-
 
         // Player movement
         if (IsKeyDown('W')){
@@ -100,7 +129,7 @@ int main(){
         
         DrawText(TextFormat("%i | %i", p1Score, p2Score), 300, 15, 100, RED);
         
-//        if(CheckCollisionCircleRec(center, radius, ))
+
 
         EndDrawing();
     }
