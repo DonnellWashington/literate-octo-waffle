@@ -1,4 +1,6 @@
 #include<raylib.h>
+#include"button.hpp"
+
 
 // Basic player properties
 typedef struct {
@@ -91,6 +93,8 @@ int main(){
 
     Color green = {20, 160, 133, 255};
 
+    //Button startButton();
+
     player_t player1 = InitPlayer(50, 250, WHITE);
     player_t player2 = InitPlayer(750, 250, WHITE);
 
@@ -100,61 +104,68 @@ int main(){
     int p2Score = 0;
 
     while (WindowShouldClose() == false){
+
+        DrawText("Welcome to Poing", 65, 250, 75, RED);
         
-        ball.pos.x += ball.speed.x;
-        ball.pos.y += ball.speed.y;
-
-        if (ball.pos.x - ball.radius <= 0 || ball.pos.x + ball.radius >= GetScreenHeight()){
-            ball.speed.y *= -1;
-        }
-
-        if (ball.pos.y - ball.radius <= 0 || ball.pos.y + ball.radius >= GetScreenHeight())
-        {
-            ball.speed.y *= -1;
-        }
+        Vector2 mousePos = GetMousePosition();
+        bool mousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
         
 
-        if (ball.pos.x - ball.radius <= 0){
-            p2Score++;
-            ball = InitBall();
-        }
-        if (ball.pos.x + ball.radius >= GetScreenWidth()){
-            p1Score++;
-            ball = InitBall();
-        }
-
-        checkCollide(&ball, &player1);
-        checkCollide(&ball, &player2);
-
-        // Player movement
-        if(IsKeyDown('W')) player1.rect.y -= 5;
         
-        if(IsKeyDown('S')) player1.rect.y += 5;
 
-        // if (IsKeyDown(KEY_DOWN)) player2.rect.y += 5;
+        // ball.pos.x += ball.speed.x;
+        // ball.pos.y += ball.speed.y;
 
-        // if (IsKeyDown(KEY_UP)) player2.rect.y -= 5;
+        // if (ball.pos.x - ball.radius <= 0 || ball.pos.x + ball.radius >= GetScreenHeight()){
+        //     ball.speed.y *= -1;
+        // }
 
-        // Player borders y cosas otras
-        if (player1.rect.y <= 0) player1.rect.y = 0;
-        if (player1.rect.y + player1.rect.height > GetScreenHeight()) player1.rect.y = GetScreenHeight() - player1.rect.height;
-
-        if (player2.rect.y <= 0) player2.rect.y = 0;
-        if (player2.rect.y + player2.rect.height > GetScreenHeight()) player2.rect.y = GetScreenHeight() - player2.rect.height;
-
-        if (ball.pos.y < player2.rect.y +player2.rect.height / 2) player2.rect.y -= 5;
-
-        else if (ball.pos.y > player2.rect.y + player2.rect.height / 2) player2.rect.y += 5;
+        // if (ball.pos.y - ball.radius <= 0 || ball.pos.y + ball.radius >= GetScreenHeight())
+        // {
+        //     ball.speed.y *= -1;
+        // }
         
+
+        // if (ball.pos.x - ball.radius <= 0){
+        //     p2Score++;
+        //     ball = InitBall();
+        // }
+        // if (ball.pos.x + ball.radius >= GetScreenWidth()){
+        //     p1Score++;
+        //     ball = InitBall();
+        // }
+
+        // checkCollide(&ball, &player1);
+        // checkCollide(&ball, &player2);
+
+        // // Player movement
+        // if(IsKeyDown('W')) player1.rect.y -= 5;
+        
+        // if(IsKeyDown('S')) player1.rect.y += 5;
+
+        // // if (IsKeyDown(KEY_DOWN)) player2.rect.y += 5;
+
+        // // if (IsKeyDown(KEY_UP)) player2.rect.y -= 5;
+
+        // // Player borders y orta cosas
+        // if (player1.rect.y <= 0) player1.rect.y = 0;
+        // if (player1.rect.y + player1.rect.height > GetScreenHeight()) player1.rect.y = GetScreenHeight() - player1.rect.height;
+
+        // if (player2.rect.y <= 0) player2.rect.y = 0;
+        // if (player2.rect.y + player2.rect.height > GetScreenHeight()) player2.rect.y = GetScreenHeight() - player2.rect.height;
+
+        // if (ball.pos.y < player2.rect.y +player2.rect.height / 2) player2.rect.y -= 5;
+
+        // else if (ball.pos.y > player2.rect.y + player2.rect.height / 2) player2.rect.y += 5;
         
 
         BeginDrawing();
         ClearBackground(green);
-        drawBall(&ball);
-        drawPlayer(&player1);
-        drawPlayer(&player2);
-        DrawText(TextFormat("%i | %i", p1Score, p2Score), 300, 15, 100, RED);
-        checkWin(p1Score, p2Score);
+        // drawBall(&ball);
+        // drawPlayer(&player1);
+        // drawPlayer(&player2);
+        // DrawText(TextFormat("%i | %i", p1Score, p2Score), 300, 15, 100, RED);
+        // checkWin(p1Score, p2Score);
         EndDrawing();
     }
 
