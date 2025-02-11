@@ -131,9 +131,9 @@ int main(){
         
         if(IsKeyDown('S')) player1.rect.y += 5;
 
-        if (IsKeyDown(KEY_DOWN)) player2.rect.y += 5;
+        // if (IsKeyDown(KEY_DOWN)) player2.rect.y += 5;
 
-        if (IsKeyDown(KEY_UP)) player2.rect.y -= 5;
+        // if (IsKeyDown(KEY_UP)) player2.rect.y -= 5;
 
         // Player borders y cosas otras
         if (player1.rect.y <= 0) player1.rect.y = 0;
@@ -141,6 +141,12 @@ int main(){
 
         if (player2.rect.y <= 0) player2.rect.y = 0;
         if (player2.rect.y + player2.rect.height > GetScreenHeight()) player2.rect.y = GetScreenHeight() - player2.rect.height;
+
+        if (ball.pos.y < player2.rect.y +player2.rect.height / 2) player2.rect.y -= 5;
+
+        else if (ball.pos.y > player2.rect.y + player2.rect.height / 2) player2.rect.y += 5;
+        
+        
 
         BeginDrawing();
         ClearBackground(green);
